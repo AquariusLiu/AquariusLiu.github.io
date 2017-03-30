@@ -10,25 +10,35 @@
 <script type="text/javascript">
 	$(function() {
 		var keys = [
-			'archer c5400', 'archer c3150', 'archer c9', 'archer c7', 'archer c1200', 
-			'archer c55', 'tl-wr802n', 're450', 're305', 're200',
-			'tl-wa850re', 'archer t4uh', 'archer t4u', 'archer t2u', 'r8500-100jps',
-			'rt-ac88u', 'wxr-2533dhp2', 'pa-wg2600hp2', 'wrc-2533ghbk-1', 'wrc-2533ghbk2-t',
-			'wxr-1900dhp2', 'rt-ac68u', 'wrc-1900ghbk-s', 'wxr-1750dhp', 'pa-wg1800dp2',
-			'pa-wg1200hs', 'wrc-1167ghbk-s', 'wn-ax1167gr', 'whr-1166dhp3', 'wmr-433w',
-			'pa-wf300hp2', 'wrh-300xx3-s', 'wn-ac583trk'];
-
+			'ARCHER C5400', 'R8500', 'ARCHER C3150', 'RT-AC88U', 'WXR-2533DHP2', 
+			'WG2600HP2', 'WRC-2533GHBK-I', 'WRC-2533GHBK2-T', 'ARCHER C9', 'WXR-1900DHP2', 
+			'WXR-1901DHP3', 'RT-AC68U', 'WRC-1900GHBK-S', 'ARCHER C7', 'WXR-1750DHP', 'WXR-1750DHP/Y',
+			'WG1800DP2', 'ARCHER C1200', 'WG1200HS', 'WRC-1167GHBK-S', 'WN-AX1167GR', 
+			'ARCHER C55', 'WHR-1166DHP3', 'TL-WR802N', 'WMR-433W-BK', 'PA-WF300HP2', 
+			'WRH-300Xx3-S', 'WN-AC583TRK', 'RE450', 'RE305', 'WEX-1166DHP', 
+			'WN-AC1167EXP', 'WTC-1167HWH-D', 'WTC-1167HWH', 'RE200', 'WEX-733DHP', 
+			'WEX-733D', 'EX6100-100JPS', 'TL-WA850RE', 'WEX-G300', 'WN-G300EXP', 
+			'WTC-300HWH', 'ARCHER T4UH', 'ARCHER T4U', 'WI-U3-866D', 'WDC-867SU3SBK', 
+			'WN-AC867U', 'ARCHER T2U', 'WI-U2-433DM', 'WN-AC433UK'];
+		
 		var urls = [
-			'http://www.yodobashi.com/ec/category/index.html?cate=&word=%s',
-			'https://www.amazon.co.jp/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=%s',
-			'http://www.biccamera.com/bc/disp/CSfDispListPage_001.jsp?dispNo=&q=%s',
-			'https://www.sofmap.com/search_result.aspx?mode=SEARCH&product_type=ALL&keyword=%s'
+			'https://www.amazon.co.jp/s/ref=nb_sb_noss?url=search-alias%3Dcomputers&field-keywords=%s',
+			'http://www.yodobashi.com/ec/category/index.html?cate=19531_500000000000000201&word=%s',
+			'http://www.biccamera.com/bc/disp/CSfDispListPage_001.jsp?dispNo=001100&q=%s',
+			'https://www.sofmap.com/search_result.aspx?mode=SEARCH&product_type=NEW&gid=PL00000000&keyword=%s'
 		];
 		var selectors = [
+			'div#atfResults div.s-item-container>div.a-row:nth-child(3):contains(プライム)',
 			'div.pInfo',
-			'div.s-item-container>div.a-row:nth-child(3)',
-			'p.bic_price+p:nth-child(5)',
+			'div.prod_box_inner',
 			'div.search-img-textbox'
+		];
+		
+		var priceSelectors = [
+			'span.s-price',
+			'ul li:eq(0) .red,ul li:eq(0) .gray',
+			'p.bic_price+p:nth-child(5)',
+			'div.normal-price span,div.tokka-price span'
 		];
 
 		var $table = $('#table');
@@ -44,13 +54,16 @@
 			$tbody.append($row);
 		}
 
-		$.each(keys, function(rows, key){
+		$.each(keys, function(rows, key) {
 			for(var cols=0; cols<urls.length; cols++) {
-				var url = urls[cols].replace('%s', key.replace(' ', ' '));
-
+				var url;
+				if (cols == 3) {
+					url = urls[cols].replace('%s', key.replace(' ', ''));
+				} else {
+					url = urls[cols].replace('%s', key.replace(' ', '+'));
+				}
 				(function(rows, cols, key, url) {
 					$.get(url, function(data) {
-						
 						var selector = selectors[cols];
 						var c = [];
 						$(data).find(selector).each(function() {
@@ -60,22 +73,47 @@
 							
 							var match = regExp.test(content);
 							if (match) {
-								if (cols == 3) {
+								if (cols == 4) {
 									var href = $(this).parent().find('span.list-name a').attr('href');
-									console.log('href=', href);
 									(function(rows, cols) {
 										$.get(href, function(data) {
-											var price = $(data).find('div.product-detail-price-box').text();
+											var price = $(data).find('div.product-detail-price-box div.product-detail-price4 div.number:eq(1)').text();
 											$('#table tbody').find('tr').eq(rows).find('td').eq(cols+1).html('<pre>' + price + '</pre>');
 										});
 									}(rows, cols))
 								} else {
-									c.push($(this).text());
+									var price = $(this).find(priceSelectors[cols]).text();
+									var priceReg = /\d+[,]?\d+/;
+									
+									var matched = price.match(priceReg);
+									if (matched) {
+										var v = matched[0];
+										if (cols == 3) {
+											v = parsePriceToInt(v);
+											v = parseInt(v * 1.08);
+											c.push(parseIntToPrice(v));
+										} else {
+											c.push(v);
+										}
+									}
 								}
 							}
 						});
-						if (cols != 3) {
-							$('#table tbody').find('tr').eq(rows).find('td').eq(cols+1).html('<pre>' + c.join('<br>') + '</pre>');
+						if (cols != 4) {
+							if (c.length > 1) {
+								var min = 0;
+								$.each(c, function(idx, v) {
+									v = parsePriceToInt(v);
+									if (!min || min > v) {
+										min = v;
+									}
+								});
+								if (min) {
+									$('#table tbody').find('tr').eq(rows).find('td').eq(cols+1).html('<pre>' + parseIntToPrice(min) + '</pre>');
+								}
+							} else {
+								$('#table tbody').find('tr').eq(rows).find('td').eq(cols+1).html('<pre>' + c.join('<br>') + '</pre>');
+							}
 						}
 					});
 
@@ -83,14 +121,25 @@
 			}
 		});
 	});
+	function parsePriceToInt(price) {
+		return parseInt(price.replace(',', ''));
+	}
+	function parseIntToPrice(i) {
+		var arr = [];
+		while(i>0) {
+			arr.push(i % 1000);
+			i = parseInt(i/1000);
+		}
+		return arr.reverse().join(',');
+	}
     </script>
 </head>
 <body>
 	<table id="table">
 		<thead>
 			<th>Product</th>
-			<th>yodobash</th>
 			<th>amazon</th>
+			<th>yodobashi</th>
 			<th>biccamera</th>
 			<th>sofmap</th>
 		</thead>
