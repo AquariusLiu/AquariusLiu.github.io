@@ -1,35 +1,101 @@
 <!DOCTYPE html>
 <html lang="en">
-  <head>
-    <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
-    <script type="text/javascript" src="jQuery/jquery-2.2.3.min.js"></script>
-    <script type="text/javascript">
-      var keys = ['archer c9'];
-      
-      var urls = ['http://www.yodobash.com'];
-      var patterns = ['%s/ec/category/index.html?cate=&word=%s&ginput=%s'];
-      var selectors = ['div.pInfo'];
-      
-      var url = 'http://www.yodobashi.com/ec/category/index.html?cate=&word=archer+c9&ginput=archer+c9';
-      url = 'http://www.biccamera.com/bc/disp/CSfDispListPage_001.jsp?dispNo=&q=archer+c9';
-      
-      var selector = 'div.pInfo';
-      selector = 'p.bic_price';
-      
-      $.get(url, function(data) {
-           $(data).find(selector).parent().each(function() {
-               var content = $(this).text();
-               
-               var filter = 'archer*c9';
-               var regExp = new RegExp(filter, 'i');
-			   var match = regExp.test(content);
-			   if (match) {
-			       console.log(content);
-			   }
-           });
-       });
+<head>
+<style type="text/css">
+	th, td {
+		border: 1px solid black;
+	}
+</style>
+<script type="text/javascript" src="jQuery/jquery-2.2.3.min.js"></script>
+<script type="text/javascript">
+	$(function() {
+		var keys = [
+			'archer c5400', 'archer c3150', 'archer c9', 'archer c7', 'archer c1200', 
+			'archer c55', 'tl-wr802n', 're450', 're305', 're200',
+			'tl-wa850re', 'archer t4uh', 'archer t4u', 'archer t2u', 'r8500-100jps',
+			'rt-ac88u', 'wxr-2533dhp2', 'pa-wg2600hp2', 'wrc-2533ghbk-1', 'wrc-2533ghbk2-t',
+			'wxr-1900dhp2', 'rt-ac68u', 'wrc-1900ghbk-s', 'wxr-1750dhp', 'pa-wg1800dp2',
+			'pa-wg1200hs', 'wrc-1167ghbk-s', 'wn-ax1167gr', 'whr-1166dhp3', 'wmr-433w',
+			'pa-wf300hp2', 'wrh-300xx3-s', 'wn-ac583trk'];
+
+		var urls = [
+			'http://www.yodobashi.com/ec/category/index.html?cate=&word=%s',
+			'https://www.amazon.co.jp/s/ref=nb_sb_noss?url=search-alias%3Daps&field-keywords=%s',
+			'http://www.biccamera.com/bc/disp/CSfDispListPage_001.jsp?dispNo=&q=%s',
+			'https://www.sofmap.com/search_result.aspx?mode=SEARCH&product_type=ALL&keyword=%s'
+		];
+		var selectors = [
+			'div.pInfo',
+			'div.s-item-container>div.a-row:nth-child(3)',
+			'p.bic_price+p:nth-child(5)',
+			'div.search-img-textbox'
+		];
+
+		var $table = $('#table');
+		var $tbody = $table.find('tbody');
+		
+		for(var i=0; i<keys.length; i++) {
+			var $row = $('<tr>');
+			$row.append('<td>' + keys[i] + '</td>');
+			for(var j=0; j<urls.length; j++) {
+				var $td = $('<td>');
+				$row.append($td);
+			}
+			$tbody.append($row);
+		}
+
+		$.each(keys, function(rows, key){
+			for(var cols=0; cols<urls.length; cols++) {
+				var url = urls[cols].replace('%s', key.replace(' ', ' '));
+
+				(function(rows, cols, key, url) {
+					$.get(url, function(data) {
+						
+						var selector = selectors[cols];
+						var c = [];
+						$(data).find(selector).each(function() {
+							var content = $(this).parent().text();
+							var filter = key.replace(' ', '.*');
+							var regExp = new RegExp(filter, 'i');
+							
+							var match = regExp.test(content);
+							if (match) {
+								if (cols == 3) {
+									var href = $(this).parent().find('span.list-name a').attr('href');
+									console.log('href=', href);
+									(function(rows, cols) {
+										$.get(href, function(data) {
+											var price = $(data).find('div.product-detail-price-box').text();
+											$('#table tbody').find('tr').eq(rows).find('td').eq(cols+1).html('<pre>' + price + '</pre>');
+										});
+									}(rows, cols))
+								} else {
+									c.push($(this).text());
+								}
+							}
+						});
+						if (cols != 3) {
+							$('#table tbody').find('tr').eq(rows).find('td').eq(cols+1).html('<pre>' + c.join('<br>') + '</pre>');
+						}
+					});
+
+				}(rows, cols, key, url))
+			}
+		});
+	});
     </script>
-  </head>
-  <body>
-  </body>
+</head>
+<body>
+	<table id="table">
+		<thead>
+			<th>Product</th>
+			<th>yodobash</th>
+			<th>amazon</th>
+			<th>biccamera</th>
+			<th>sofmap</th>
+		</thead>
+		<tbody>
+		</tbody>
+	</table>
+</body>
 </html>
