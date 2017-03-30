@@ -55,7 +55,7 @@
 						var c = [];
 						$(data).find(selector).each(function() {
 							var content = $(this).parent().text();
-							var filter = key.replace(' ', '.*');
+							var filter = key.replace(' ', '.?');
 							var regExp = new RegExp(filter, 'i');
 							
 							var match = regExp.test(content);
