@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <script type="text/javascript" src="jQuery/jquery-2.2.3.min.js"></script>
+    <script type="text/javascript">
+      var keys = ['archer c9'];
+      
+      var urls = ['http://www.yodobash.com'];
+      var patterns = ['%s/ec/category/index.html?cate=&word=%s&ginput=%s'];
+      var selectors = ['div.pInfo'];
+      
+      var url = 'http://www.yodobashi.com/ec/category/index.html?cate=&word=archer+c9&ginput=archer+c9';
+      url = 'http://www.biccamera.com/bc/disp/CSfDispListPage_001.jsp?dispNo=&q=archer+c9';
+      
+      var selector = 'div.pInfo';
+      selector = 'p.bic_price';
+      
+      $.get(url, function(data) {
+           $(data).find(selector).parent().each(function() {
+               var content = $(this).text();
+               
+               var filter = 'archer*c9';
+               var regExp = new RegExp(filter, 'i');
+			   var match = regExp.test(content);
+			   if (match) {
+			       console.log(content);
+			   }
+           });
+       });
+    </script>
+  </head>
+  <body>
+  </body>
+</html>
