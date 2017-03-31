@@ -92,7 +92,7 @@ Number.prototype.format = function(n, x) {
 									var matched = price.match(priceReg);
 									if (matched) {
 										var v = matched[0];
-										if (cols == 3) {
+										if (cols == 4) {
 											v = parsePriceToInt(v);
 											v = parseInt(v * 1.08);
 											c.push(parseIntToPrice(v));
