@@ -8,6 +8,10 @@
 </style>
 <script type="text/javascript" src="jQuery/jquery-2.2.3.min.js"></script>
 <script type="text/javascript">
+Number.prototype.format = function(n, x) {
+    var re = '\\d(?=(\\d{' + (x || 3) + '})+' + (n > 0 ? '\\.' : '$') + ')';
+    return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
+};
 	$(function() {
 		var keys = [
 			'ARCHER C5400', 'R8500', 'ARCHER C3150', 'RT-AC88U', 'WXR-2533DHP2', 
@@ -125,12 +129,7 @@
 		return parseInt(price.replace(',', ''));
 	}
 	function parseIntToPrice(i) {
-		var arr = [];
-		while(i>0) {
-			arr.push(i % 1000);
-			i = parseInt(i/1000);
-		}
-		return arr.reverse().join(',');
+		return i.format();
 	}
     </script>
 </head>
