@@ -21,3 +21,5 @@ WMR-433W -> WMR-433W-BK
 PA-WG2600HP2 -> WG2600HP2
 PA-WG1800DP2 -> WG1800DP2
 PA-WG1200HS -> WG1200HS
+
+把价格都计算成统一到手价，具体是Amazon不用变，Yodobashi扣掉point, Bic 和Softmap加上税再扣掉point
