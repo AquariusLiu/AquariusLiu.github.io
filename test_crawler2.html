@@ -114,7 +114,7 @@ Number.prototype.format = function(n, x) {
 								$('#table tbody').find('tr').eq(rowNum).find('td').eq(2).html('<pre>' + parseIntToPrice(min) + '</pre>');
 							}
 						} else {
-							$('#table tbody').find('tr').eq(rows).find('td').eq(2).html('<pre>' + c.join('<br>') + '</pre>');
+							$('#table tbody').find('tr').eq(rowNum).find('td').eq(2).html('<pre>' + c.join('<br>') + '</pre>');
 						}
 					});
 
