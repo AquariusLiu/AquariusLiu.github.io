@@ -1,0 +1,39 @@
+<!doctype html>
+
+<html>
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
+    <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  </head>
+  <body>
+    <div id="container"></div>
+    
+    <script type="text/javascript">
+    var username = "AquariusLiu";
+    var password = "xxx";
+    $(document).ajaxSend(function(event, jqxhr, settings) {
+        //jqxhr.setRequestHeader("Authorization", "Basic " + btoa(username + ":" + password));
+        //jqxhr.setRequestHeader("Authorization", "token OAUTH-TOKEN");
+    });
+    $.get('https://api.github.com/authorizations', function(data) {
+        console.log('authorizations', data);
+    })
+    $.get('https://api.github.com/repos/AquariusLiu/AquariusLiu.github.io/assignees', function(data) {
+        console.log('data', data);
+    });
+    var data = {
+        "title": "Found a bug",
+        "body": "I'm having a problem with this.",
+        "assignee" : "AquariusLiu",
+        "labels":["bug"]
+    };
+    $.post('https://api.github.com/repos/AquariusLiu/AquariusLiu.github.io/issues', JSON.stringify(data), function(data) {
+        console.log('data', data);
+    });
+    $.post('https://github.com/login/oauth/access_token', JSON.stringify(data), function(data) {
+        console.log('data', data);
+    });
+    </script>
+  </body>
+</html>
+

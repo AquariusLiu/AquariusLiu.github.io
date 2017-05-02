@@ -1,0 +1,36 @@
+<!doctype html>
+<html>
+<head>
+  <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
+  <script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+  <script type="text/javascript">
+  	$(function() {
+      $.ajax({
+          url: 'words1.txt',
+          dataType: 'text',
+          success: function(data) {
+              var lines = data.split('\n');
+              $.each(lines, function(idx, line) {
+                  var pair = line.split(' ');
+                  console.log(pair);
+              });
+              
+              $('#words_table').DataTable({
+                  data: dataSet,
+                  columns: [{
+                      title: 'en'
+                  }, {
+                      title: 'cn'
+                  }]
+              });
+          }
+      });
+  	});
+  </script>
+</head>
+<body>
+  <div id="container">
+    <table id="words_table"></table>
+  </div>
+</body>
+</html>
