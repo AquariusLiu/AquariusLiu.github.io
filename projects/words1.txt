@@ -1,2 +1,8 @@
-abc 字母表
-cdf 什么鬼
+associate 关联 social
+specify 指定 special
+commodity 商品
+crawl 爬行
+derive 源自
+conspire 共谋
+obscure 模糊的
+emit 发射
