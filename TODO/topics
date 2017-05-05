@@ -20,3 +20,5 @@ Lisp(Common Lisp, Scheme, Emacs Lisp, Clojure)
 图计算 & GraphX
 机器学习与种族偏见
 Google word2vec TensorFlow
+Word Cloud
+随机事件的置信区间
