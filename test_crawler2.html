@@ -13,7 +13,7 @@ Number.prototype.format = function(n, x) {
     return this.toFixed(Math.max(0, ~~n)).replace(new RegExp(re, 'g'), '$&,');
 };
 	$(function() {
-		var keys = [
+		var keys = ['WXR-1751DHP2', 'WHR-1166DHP4',
 			'ARCHER C5400', 'R8500', 'ARCHER C3150', 'RT-AC88U', 'WXR-2533DHP2', 
 			'WG2600HP2', 'WRC-2533GHBK-I', 'WRC-2533GHBK2-T', 'ARCHER C9', 'WXR-1900DHP2', 
 			'WXR-1901DHP3', 'RT-AC68U', 'WRC-1900GHBK-S', 'ARCHER C7', 'WXR-1750DHP', 'WXR-1750DHP/Y',
@@ -29,7 +29,7 @@ Number.prototype.format = function(n, x) {
 		
 		var urls = [
 			'https://www.amazon.co.jp/s/ref=nb_sb_noss?url=search-alias%3Dcomputers&field-keywords=%s',
-			'http://www.yodobashi.com/ec/category/index.html?cate=19531_500000000000000201&word=%s',
+			'http://www.yodobashi.com/category/19531/19532/?word=%s',
 			'http://www.biccamera.com/bc/disp/CSfDispListPage_001.jsp?dispNo=001100&q=%s',
 			'https://www.sofmap.com/search_result.aspx?mode=SEARCH&product_type=NEW&gid=PL00000000&keyword=%s'
 		];
@@ -42,7 +42,7 @@ Number.prototype.format = function(n, x) {
 		
 		var priceSelectors = [
 			'span.s-price',
-			'ul li:eq(0) .red,ul li:eq(0) .gray',
+			'ul li:eq(0) span.productPrice',
 			'p.bic_price',
 			'div.normal-price span,div.tokka-price span'
 		];
