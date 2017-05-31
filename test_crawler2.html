@@ -29,12 +29,12 @@ Number.prototype.format = function(n, x) {
 		
 		var urls = [
 			'https://www.amazon.co.jp/s/ref=nb_sb_noss?url=search-alias%3Dcomputers&field-keywords=%s',
-			'http://www.yodobashi.com/category/19531/19532/?word=%s',
+			'http://www.yodobashi.com/ec/category/index.html?cate=19531_500000000000000201&word=%s',
 			'http://www.biccamera.com/bc/disp/CSfDispListPage_001.jsp?dispNo=001100&q=%s',
 			'https://www.sofmap.com/search_result.aspx?mode=SEARCH&product_type=NEW&gid=PL00000000&keyword=%s'
 		];
 		var selectors = [
-			'div#atfResults div.s-item-container>div.a-row:nth-child(3):contains(プライム)',
+			'div#atfResults div.s-item-container>div.a-row:nth-child(4) i.a-icon-prime-jp',
 			'div.pInfo',
 			'div.prod_box_inner',
 			'div.search-img-textbox'
@@ -75,12 +75,18 @@ Number.prototype.format = function(n, x) {
 						var c = [];
 						$(data).find(selector).each(function() {
 							var content = $(this).parent().text();
+							if (cols == 0) {
+								content = $(this).parent().parent().parent().text();
+							}
 							var filter = key.replace(' ', '.?');
 							var regExp = new RegExp(filter, 'i');
 							
 							var match = regExp.test(content);
 							if (match) {
 								var price = $(this).find(priceSelectors[cols]).text();
+								if (cols == 0) {
+									price = $(this).parent().find(priceSelectors[cols]).text();
+								}
 								var priceReg = /\d+[,]?\d+/;
 								
 								var matched = price.match(priceReg);
