@@ -302,13 +302,29 @@
 		$('#container').append(lines);
 	}
 	
+	var typeClasses = ['type1', 'type2', 'type3', 'type4', 'type5'];
+	
 	function clickBox() {
 		$(this).toggleClass('checked');
 		
 		var $checkedBoxes = $('div.box.checked');
 		
+		console.log($checkedBoxes.length);
 		if ($checkedBoxes.length == 2) {
-			//TODO
+			var $b1 = $checkedBoxes.eq(0);
+			var $b2 = $checkedBoxes.eq(1);
+			var point1 = new Point($b1.data('row'), $b1.data('col'));
+			var point2 = new Point($b2.data('row'), $b2.data('col'));
+			
+			var linkable = isLinkable(point1, point2);
+			console.log(point1, point2, linkable);
+			if (linkable) {
+				setZero(point1, point2);
+				console.log(gameMap);
+				$checkedBoxes.removeClass(typeClasses);
+			}
+			
+			$checkedBoxes.toggleClass('checked');
 		}
 	}
 	
