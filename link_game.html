@@ -1,33 +1,50 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+<meta content='text/html;charset=UTF-8'/>
 <style type="text/css">
   div.line {
-    height: 10px;
+    height: 60px;
   }
   div.box {
     display: inline-block;
-    width: 10px;
-    height: 10px;
+    width: 60px;
+    height: 60px;
     border: 0.5px solid black;
+    
+    background-size: contain;
   }
   div.box.checked {
     border-color: red;
   }
   div.box.type1 {
-    content: '1';
+    background-image: url(./images/1.png);
+  }
+  div.box.type2 {
+    background-image: url(./images/2.png);
+  }
+  div.box.type3 {
+    background-image: url(./images/3.png);
+  }
+  div.box.type4 {
+    background-image: url(./images/4.png);
+  }
+  div.box.type5 {
+    background-image: url(./images/5.png);
+  }
+  div#container {
+  	text-align: center;
   }
 </style>
 <script type="text/javascript" src="jQuery/jquery-2.2.3.min.js"></script>
 <script type="text/javascript">
 	var gameMap;
-	var rows = 7;
-	var cols = 6;
+	var rows = 6;
+	var cols = 7;
 	
 	$(function() {
 		gameMap = createGameMap();
 		
-		console.log(gameMap);
 		createUI();
 		
 		$('#container').on('click', 'div.box', clickBox);
@@ -124,7 +141,6 @@
 			rlt.push(nums[idx]);
 			counts[idx] = counts[idx]-1;
 		}
-		console.log(rlt);
 		return rlt;
 	}
 	
@@ -302,14 +318,26 @@
 		$('#container').append(lines);
 	}
 	
-	var typeClasses = ['type1', 'type2', 'type3', 'type4', 'type5'];
+	var typeClasses = 'type1 type2 type3 type4 type5';
 	
 	function clickBox() {
-		$(this).toggleClass('checked');
+		var hasType = false;
+		
+		var $box = $(this);
+		$.each(typeClasses.split(' '), function(idx, value) {
+			if ($box.hasClass(value)) {
+				hasType = true;
+				$box.toggleClass('checked');
+				return false;
+			}
+		});
+		
+		if (!hasType) {
+			return;
+		}
 		
 		var $checkedBoxes = $('div.box.checked');
 		
-		console.log($checkedBoxes.length);
 		if ($checkedBoxes.length == 2) {
 			var $b1 = $checkedBoxes.eq(0);
 			var $b2 = $checkedBoxes.eq(1);
@@ -317,11 +345,13 @@
 			var point2 = new Point($b2.data('row'), $b2.data('col'));
 			
 			var linkable = isLinkable(point1, point2);
-			console.log(point1, point2, linkable);
 			if (linkable) {
 				setZero(point1, point2);
-				console.log(gameMap);
 				$checkedBoxes.removeClass(typeClasses);
+				
+				if (!searchLinkable()) {
+					alert('Happy children\'s day! ←_←');
+				}
 			}
 			
 			$checkedBoxes.toggleClass('checked');
