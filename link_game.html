@@ -30,16 +30,7 @@
 		console.log(gameMap);
 		createUI();
 		
-		$('#container').on('click', 'div.box', function() {
-			$(this).toggleClass('checked');
-			
-			var $checkedBoxes = $('div.box.checked');
-			
-			$.each($checkedBoxes, function() {
-				console.log($(this).data('row'));
-				console.log($(this).data('col'));
-			});
-		});
+		$('#container').on('click', 'div.box', clickBox);
 	});
 	
 	function Point(row, col) {
@@ -302,12 +293,25 @@
 				var $box = $('<div class="box"></div>');
 				$box.data('row', row);
 				$box.data('col', col);
+				if (gameMap[row][col] != 0)
+				$box.addClass('type' + gameMap[row][col]);
 				$line.append($box);
 			}
 			lines.push($line);
 		}
 		$('#container').append(lines);
 	}
+	
+	function clickBox() {
+		$(this).toggleClass('checked');
+		
+		var $checkedBoxes = $('div.box.checked');
+		
+		if ($checkedBoxes.length == 2) {
+			//TODO
+		}
+	}
+	
 </script>
 </head>
 <body>
