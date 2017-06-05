@@ -4,13 +4,13 @@
 <meta content='text/html;charset=UTF-8'/>
 <style type="text/css">
   div.line {
-    height: 60px;
+    height: 62px;
   }
   div.box {
     display: inline-block;
     width: 60px;
     height: 60px;
-    border: 0.5px solid black;
+    border: 1px solid black;
     
     background-size: contain;
   }
@@ -18,25 +18,25 @@
     border-color: red;
   }
   div.box.type1 {
-    background-image: url(./images/1.png);
+    background-image: url(../images/1.png);
   }
   div.box.type2 {
-    background-image: url(./images/2.png);
+    background-image: url(../images/2.png);
   }
   div.box.type3 {
-    background-image: url(./images/3.png);
+    background-image: url(../images/3.png);
   }
   div.box.type4 {
-    background-image: url(./images/4.png);
+    background-image: url(../images/4.png);
   }
   div.box.type5 {
-    background-image: url(./images/5.png);
+    background-image: url(../images/5.png);
   }
   div#container {
   	text-align: center;
   }
 </style>
-<script type="text/javascript" src="jQuery/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="../jQuery/jquery-2.2.3.min.js"></script>
 <script type="text/javascript">
 	var gameMap;
 	var rows = 6;
@@ -350,7 +350,7 @@
 				$checkedBoxes.removeClass(typeClasses);
 				
 				if (!searchLinkable()) {
-					alert('Happy children\'s day! ←_←');
+					alert('Happy the day after children\'s day! ←_←');
 				}
 			}
 			
