@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta content='text/html;charset=UTF-8'/>
+<style type="text/css">
+div.box {
+  width: 10px;
+  height: 10px;
+  background: lightgrey;
+  border-right: 1px solid grey;
+  border-bottom: 1px solid grey;
+  border-left: 1px solid #EEE;
+  border-top: 1px solid #EEE;
+}
+</style>
+<script type="text/javascript" src="../jQuery/jquery-2.2.3.min.js"></script>
+<script type="text/javascript">
+	var rows = 5;
+	var cols = 5;
+	var mineCounts = 4;
+	
+	var mineMap = createMineMap(rows, cols, mineCounts);
+	var countsMap = createCountsMap(mineMap);
+	var showMap = createShowMap(rows, cols);
+	
+	$(function() {
+    	printMap(mineMap);
+    	printMap(countsMap);
+    	printMap(showMap);
+		
+    	console.log(clickBox(1, 1, mineMap));
+		console.log(clickBox(1, 2, mineMap));
+		console.log(clickBox(1, 3, mineMap));
+		
+		printMap(showMap);
+	});
+	
+	function clickBox(row, col) {
+		if (mineMap[row][col]) {
+			showMines();
+		}
+		if (countsMap[row][col] == 0) {
+			spreadBlank(row, col);
+		}
+		showMap[row][col] = true;
+	}
+	
+	function spreadBlank(row, col) {
+		
+	}
+	
+	function showMines() {
+		for (var r=0; r<rows; r++) {
+			for (var c=0; c<cols; c++) {
+				if (mineMap[r][c]) {
+					showMap[r][c] = true;
+				}
+			}
+		}
+	}
+	
+	function createMineMap(rows, cols, mineCounts) {
+		if (rows * cols < mineCounts) {
+			return null;
+		}
+		var list = randomList(rows * cols, mineCounts);
+		
+		var arr = [];
+		for (var i=0; i<rows; i++) {
+			var s = list.splice(0, cols);
+			arr.push(s);
+		}
+		return arr;
+	}
+	
+	function createCountsMap(mineMap) {
+		var countsMap = Array.from(mineMap, line => Array.from(line, x => x == 0 ? 0 : NaN));
+		$.each(mineMap, function(rows, line) {
+			$.each(line, function(cols, value) {
+				if (value == 0) {
+					return true;
+				}
+				
+				roundPlus(rows, cols, countsMap);
+			});
+		});
+		return countsMap;
+	}
+	
+	function createShowMap(rows, cols) {
+		var arr = new Array(rows);
+		for (var i=0; i<rows; i++) {
+			var line = new Array(cols);
+			line.fill(false);
+			arr[i] = line;
+		}
+		return arr;
+	}
+	
+	function roundPlus(row, col, map) {
+		for (var r=row-1; r<=row+1; r++) {
+			for (var c=col-1; c<=col+1; c++) {
+				if (r == row && c == col) {
+					continue;
+				}
+				if (r < 0 || c < 0 || r >= map.length || c >= map[0].length) {
+					continue;
+				}
+				map[r][c]++;
+			}
+		}
+	}
+	
+	function randomList(length, count) {
+		console.log(length, count);
+		var arr = new Array(length-count);
+		arr.fill(0);
+		for (var i=0; i<count; i++) {
+			var r = parseInt(Math.random() * (arr.length+1));
+			arr.splice(r, 0, 1);
+		}
+		return arr;
+	}
+	
+	function printMap(map) {
+		console.log(map.join('\n'));
+	}
+</script>
+</head>
+<body>
+  <div id="container">
+    <div class="line">
+      <div class="box">
+      </div>
+    </div>
+  </div>
+</body>
+</html>
