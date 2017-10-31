@@ -119,8 +119,10 @@ Number.prototype.format = function(n, x) {
 							if (min) {
 								$('#table tbody').find('tr').eq(rowNum).find('td').eq(2).html('<pre>' + parseIntToPrice(min) + '</pre>');
 							}
+						} else if(c.length == 1) {
+							$('#table tbody').find('tr').eq(rowNum).find('td').eq(2).html('<pre>' + c.join(';') + '</pre>');
 						} else {
-							$('#table tbody').find('tr').eq(rowNum).find('td').eq(2).html('<pre>' + c.join('<br>') + '</pre>');
+						    $('#table tbody').find('tr').eq(rowNum).find('td').eq(2).html('<pre>-</pre>');
 						}
 					});
 
