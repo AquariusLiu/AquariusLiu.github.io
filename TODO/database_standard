@@ -1,0 +1,4 @@
+如果主键是 uuid，用 binary(16)
+日期类型用 timestamp
+boolean 类型命名为 is_xxx，使用 unsigned tinyint
+表名和字段名都采用 xx_xx 格式
