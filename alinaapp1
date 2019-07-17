@@ -2,7 +2,7 @@ apiVersion: v1
 kind: RegionPreference 
 metadata:
   name: alinaapp1
-  namespace: nix-qa
+  namespace: robot
 spec:
   regions: 
   - name: NA
@@ -14,7 +14,7 @@ apiVersion: apps/v1
 kind: Deployment
 metadata:
   name: alinaapp1
-  namespace: nix-qa
+  namespace: robot
 spec:
   selector:
     matchLabels:
